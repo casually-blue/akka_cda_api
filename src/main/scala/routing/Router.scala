@@ -5,8 +5,6 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import endpoint.{ApiEndpoint, CUCMEndpoint, GraphEndpoint, TestEndpoint}
 
-import java.util.Properties
-
 /**
  * The main router class for the application
  */
