@@ -1,30 +1,33 @@
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model._
-import akka.http.scaladsl.server.Directives._
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.io.StdIn
 
-object HTTPMain {
-  def main(args: Array[String]): Unit = {
-    implicit val system: ActorSystem[Nothing] = ActorSystem(Behaviors.empty, "my-system")
-    implicit val executionContext: ExecutionContextExecutor = system.executionContext
+import routing.Router._
 
-    val route  =
-      path("hello"){
-        get {
-          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>hello world</h1>"))
-        }
-      }
+/**
+ * The main application class.
+ *
+ * Runs a Akka http server on port 9000
+ */
+object HTTPMain extends App {
+  implicit val system: ActorSystem[Nothing] = ActorSystem(Behaviors.empty, "cda-system")
+  implicit val executionContext: ExecutionContextExecutor = system.executionContext
 
-    val bindingFuture = Http().newServerAt("localhost", 9000).bind(route)
 
-    StdIn.readLine()
-    bindingFuture
-      .flatMap(_.unbind())
-      .onComplete(_ => system.terminate())
+  /**
+   * Stores the server binding object
+   */
+  val bindingFuture = Http().newServerAt(interface="0.0.0.0", port=9000).bind(routes)
+
+  var command: Option[String] = None
+  while(!command.contains("exit")){
+    command = Some(StdIn.readLine(">> "))
   }
 
+  bindingFuture
+    .flatMap(_.unbind())
+    .onComplete(_ => system.terminate())
 }

@@ -1,0 +1,51 @@
+package routing
+
+import akka.http.scaladsl.model._
+import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server._
+import endpoint.{ApiEndpoint, CUCMEndpoint, GraphEndpoint, TestEndpoint}
+
+import java.util.Properties
+
+/**
+ * The main router class for the application
+ */
+object Router  {
+  private val cucm_config = new Properties {
+    this.load(this.getClass.getClassLoader.getResourceAsStream("cucm.properties"))
+  }
+
+  /**
+   * Endpoints and their api base url relative to the root of the server
+   */
+  val endPoints: List[(String, ApiEndpoint)] = List(
+    ("cucm", new CUCMEndpoint(
+      remoteService=cucm_config.getProperty("cucm.endpoint")
+    )),
+    ("graph", GraphEndpoint),
+    ("test", TestEndpoint)
+  )
+
+  /**
+   * Get the akka routing object for all the endpoints
+   * @return The compiled route object
+   */
+  def routes: Route = endPoints
+    .foldLeft(
+      // Base Route
+      pathEndOrSingleSlash {
+        get {
+          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, views.Home.render))
+        }
+      }
+    ) {
+      (route,endpoint) => {
+        // Register each route into the router
+        val (name, endpointRoute) = endpoint
+        route ~ pathPrefix(name)(endpointRoute.getRoutes)
+      }
+    }
+
+
+}
+

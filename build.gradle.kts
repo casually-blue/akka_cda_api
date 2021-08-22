@@ -1,24 +1,32 @@
 plugins {
-    java
     scala
+
 }
 
-group = "org.example"
+group = "io.casually-blue"
 version = "1.0-SNAPSHOT"
 
-repositories {
-    mavenCentral()
+tasks.getByName<Test>("test") {
+    useJUnitPlatform()
 }
 
+
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+    compileOnly(group="org.scala-lang", name="scala-library", version="2.13.6")
 
-    implementation("io.github.casually-blue:cucm-11:1.6")
-    implementation("com.sun.xml.ws:jaxws-rt:2.3.3")
+    testImplementation(group="org.junit.jupiter", name="junit-jupiter-api", version="5.7.2")
+    testRuntimeOnly(group="org.junit.jupiter", name="junit-jupiter-engine", version="5.7.2")
 
-    implementation("com.microsoft.graph:microsoft-graph:5.0.0")
-    implementation("com.azure:azure-identity:1.3.5")
+    implementation(group="com.lihaoyi", name="scalatags_2.13", version="0.8.2")
+
+    implementation(group="io.github.casually-blue", name="cucm-11", version="1.6")
+    implementation(group="com.sun.xml.ws", name="jaxws-rt", version="2.3.3")
+
+    implementation(group="com.microsoft.graph", name="microsoft-graph", version="5.0.0")
+    implementation(group="com.azure", name="azure-identity", version="1.3.5")
+
+    implementation(group="org.slf4j", name="slf4j-api", version="1.7.32")
+    implementation(group="org.slf4j", name="slf4j-simple", version="1.7.32")
 
     implementation(group="com.typesafe.akka", name="akka-actor_2.13", version="2.6.15")
     implementation(group="com.typesafe.akka", name="akka-actor-typed_2.13", version="2.6.15")
@@ -26,12 +34,12 @@ dependencies {
     implementation(group="com.typesafe.akka", name="akka-http-spray-json_2.13", version="10.2.6")
     implementation(group="com.typesafe.akka", name="akka-http-xml_2.13", version="10.2.6")
     implementation(group="com.typesafe.akka", name="akka-stream_2.13", version="2.6.15")
+
+    implementation(group="com.fasterxml.jackson.core", name="jackson-core", version="2.8.8")
+    implementation(group="com.fasterxml.jackson.core", name="jackson-annotations", version="2.8.8")
+    implementation(group="com.fasterxml.jackson.core", name="jackson-databind", version="2.8.8")
 }
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
-}
-
-dependencies {
-    compileOnly("org.scala-lang:scala-library:2.13.6")
+repositories {
+    mavenCentral()
 }
