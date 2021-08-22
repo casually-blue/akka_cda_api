@@ -11,17 +11,11 @@ import java.util.Properties
  * The main router class for the application
  */
 object Router  {
-  private val cucm_config = new Properties {
-    this.load(this.getClass.getClassLoader.getResourceAsStream("cucm.properties"))
-  }
-
   /**
    * Endpoints and their api base url relative to the root of the server
    */
   val endPoints: List[(String, ApiEndpoint)] = List(
-    ("cucm", new CUCMEndpoint(
-      remoteService=cucm_config.getProperty("cucm.endpoint")
-    )),
+    ("cucm", new CUCMEndpoint("https://cdacucmpub.coramdeo.local:8443/axl/")),
     ("graph", GraphEndpoint),
     ("test", TestEndpoint)
   )
