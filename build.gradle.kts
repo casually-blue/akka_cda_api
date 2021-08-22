@@ -1,6 +1,6 @@
 plugins {
     scala
-
+    application
 }
 
 group = "io.casually-blue"
@@ -8,6 +8,14 @@ version = "1.0-SNAPSHOT"
 
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
+}
+
+application {
+    mainClass.set("HTTPMain")
+}
+
+tasks.named<JavaExec>("run") {
+    standardInput = System.`in`
 }
 
 
