@@ -14,7 +14,7 @@ object Router  {
    */
   val endPoints: List[(String, ApiEndpoint)] = List(
     ("cucm", new CUCMEndpoint("https://cdacucmpub.coramdeo.local:8443/axl/")),
-    ("graph", GraphEndpoint),
+    ("graph", new GraphEndpoint),
     ("test", TestEndpoint)
   )
 
