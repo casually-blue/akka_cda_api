@@ -56,7 +56,7 @@ class CUCMEndpoint extends ApiEndpoint {
 
     path("phones") {
       if (authenticated)
-        get(parameters(Symbol("name_filter").as[String])(getPhones))
+        get(parameters("name_filter")(getPhones))
       else
         complete(StatusCodes.Forbidden, "Must Login First")
     }
