@@ -44,24 +44,17 @@ class CUCMEndpoint(remoteService: String) extends ApiEndpoint {
   }
 
   override def getRoutes: Route = concat(
-    pathEnd {
-      get {
-        complete(StatusCodes.OK, "CUCM Base Rest Endpoint")
-      }
-    },
-    path("login") {
-      get(parameters(Symbol("username").as[String], Symbol("password").as[String]) {
-        login
-      })
-    },
-    if (authenticated) {
-      path("phones") {
-        get(parameters(Symbol("name_filter").as[String]) {
-          getPhones
-        })
-      }
-    } else {
-      complete(StatusCodes.Forbidden, "Must Login First")
+    pathEnd(get(complete(StatusCodes.OK, "CUCM Base Rest Endpoint"))),
+
+    path("login")(
+      get(parameters("username", "password")(login))
+    ),
+
+    path("phones") {
+      if (authenticated)
+        get(parameters(Symbol("name_filter").as[String])(getPhones))
+      else
+        complete(StatusCodes.Forbidden, "Must Login First")
     }
   )
 }
