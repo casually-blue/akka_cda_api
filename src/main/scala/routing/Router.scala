@@ -13,7 +13,7 @@ object Router  {
    * Endpoints and their api base url relative to the root of the server
    */
   val endPoints: List[(String, ApiEndpoint)] = List(
-    ("cucm", new CUCMEndpoint("https://cdacucmpub.coramdeo.local:8443/axl/")),
+    ("cucm", new CUCMEndpoint),
     ("graph", new GraphEndpoint),
     ("test", TestEndpoint)
   )

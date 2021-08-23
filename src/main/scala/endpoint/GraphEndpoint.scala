@@ -17,11 +17,10 @@ import scala.language.postfixOps
 
 class GraphEndpoint extends ApiEndpoint {
   val properties = new Properties()
-  properties.load(this.getClass.getClassLoader.getResourceAsStream("auth.properties"))
-
-  val clientId: String = properties.getProperty("client")
-  val secretKey: String = properties.getProperty("secret")
-  val tenantId: String = properties.getProperty("tenant")
+  properties.load(this.getClass.getClassLoader.getResourceAsStream("application.properties"))
+  val clientId: String = properties.getProperty("graph.client")
+  val secretKey: String = properties.getProperty("graph.secret")
+  val tenantId: String = properties.getProperty("graph.tenant")
   val scopes: java.util.List[String] = List("https://graph.microsoft.com/.default").asJava
 
   val credential: ClientSecretCredential = new ClientSecretCredentialBuilder()
@@ -48,7 +47,16 @@ class GraphEndpoint extends ApiEndpoint {
       nextPage = req.getNextPage
     }
 
-    complete { HttpEntity(ContentTypes.`application/json`, new ObjectMapper().writeValueAsString(users)) }
+    val json = users.asScala.map( user => {
+      s"""{
+         | "UserPrincipalName": "${user.userPrincipalName}",
+         | "FirstName": "${user.givenName}",
+         | "LastName": "${user.surname}"
+         |}""".stripMargin
+    }).fold("")((x,y) => x+y+",")
+
+
+    complete { HttpEntity(ContentTypes.`application/json`, "[" + json.dropRight(1) + "]") }
   }
 
   override def getRoutes: Route = pathEnd {

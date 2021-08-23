@@ -13,9 +13,8 @@ import routing.Router._
  * Runs a Akka http server on port 9000
  */
 object HTTPMain extends App {
-  implicit val system: ActorSystem[Nothing] = ActorSystem(Behaviors.empty, "cda-system")
+  implicit val system: ActorSystem[Nothing] = ActorSystem[Nothing](Behaviors.empty, "cda-system")
   implicit val executionContext: ExecutionContextExecutor = system.executionContext
-
 
   /**
    * Stores the server binding object

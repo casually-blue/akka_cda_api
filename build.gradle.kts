@@ -39,6 +39,7 @@ dependencies {
     implementation(group="com.typesafe.akka", name="akka-actor_2.13", version="2.6.15")
     implementation(group="com.typesafe.akka", name="akka-actor-typed_2.13", version="2.6.15")
     implementation(group="com.typesafe.akka", name="akka-http_2.13", version="10.2.6")
+    implementation(group="com.typesafe.akka", name="akka-http-caching_2.13", version="10.2.6")
     implementation(group="com.typesafe.akka", name="akka-http-spray-json_2.13", version="10.2.6")
     implementation(group="com.typesafe.akka", name="akka-http-xml_2.13", version="10.2.6")
     implementation(group="com.typesafe.akka", name="akka-stream_2.13", version="2.6.15")

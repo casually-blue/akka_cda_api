@@ -1,4 +1,4 @@
 .gradle
 build
 .idea
-src/main/resources/auth.properties
+src/main/resources/application.properties

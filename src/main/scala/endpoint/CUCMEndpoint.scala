@@ -7,17 +7,21 @@ import akka.http.scaladsl.server.{Route, StandardRoute}
 import io.github.casuallyblue.cucm._
 import com.fasterxml.jackson.databind.ObjectMapper
 
+import java.util.Properties
 import javax.xml.ws.BindingProvider
 import scala.jdk.CollectionConverters.MapHasAsScala
 
-class CUCMEndpoint(remoteService: String) extends ApiEndpoint {
+class CUCMEndpoint extends ApiEndpoint {
   val client: AXLPort = new AXLAPIService().getAXLPort()
 
   private var authenticated = false
 
+  val properties = new Properties()
+  properties.load(this.getClass.getClassLoader.getResourceAsStream("application.properties"))
+
   client.asInstanceOf[BindingProvider].getRequestContext.put(
     BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-    remoteService
+    properties.getProperty("cucm.endpoint")
   )
 
   def login(username: String, password: String): StandardRoute = {
