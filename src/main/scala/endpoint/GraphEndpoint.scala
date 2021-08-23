@@ -9,8 +9,10 @@ import com.microsoft.graph.authentication.TokenCredentialAuthProvider
 import com.microsoft.graph.requests.GraphServiceClient
 import okhttp3.Request
 
+import java.util
 import java.util.Properties
 import scala.jdk.CollectionConverters._
+import scala.language.postfixOps
 
 
 class GraphEndpoint extends ApiEndpoint {
@@ -36,10 +38,17 @@ class GraphEndpoint extends ApiEndpoint {
       .buildClient()
 
   def getUser: StandardRoute = {
-    val mapper = new ObjectMapper()
 
-    val req = graphClient.users().buildRequest().get()
-    complete { HttpEntity(ContentTypes.`application/json`, mapper.writeValueAsString(req)) }
+    var req = graphClient.users().buildRequest().get()
+    val users = new util.ArrayList(req.getCurrentPage)
+    var nextPage = req.getNextPage
+    while(nextPage != null){
+      req = nextPage.buildRequest().get()
+      users.addAll(req.getCurrentPage)
+      nextPage = req.getNextPage
+    }
+
+    complete { HttpEntity(ContentTypes.`application/json`, new ObjectMapper().writeValueAsString(users)) }
   }
 
   override def getRoutes: Route = pathEnd {
