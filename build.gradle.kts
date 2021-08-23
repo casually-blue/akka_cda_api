@@ -21,6 +21,8 @@ tasks.named<JavaExec>("run") {
 
 dependencies {
     compileOnly(group="org.scala-lang", name="scala-library", version="2.13.6")
+    compileOnly(group="org.scala-lang", name="scala-reflect", version="2.13.6")
+
 
     testImplementation(group="org.junit.jupiter", name="junit-jupiter-api", version="5.7.2")
     testRuntimeOnly(group="org.junit.jupiter", name="junit-jupiter-engine", version="5.7.2")
